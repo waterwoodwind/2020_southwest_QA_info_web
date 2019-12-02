@@ -127,7 +127,7 @@ class qa_info(models.Model):
     location = models.ForeignKey(Location, on_delete = models.CASCADE, verbose_name=u'地点')
     time_bucket = models.ForeignKey(Time_Bucket, on_delete = models.CASCADE, verbose_name=u'时间')
     department = models.ForeignKey(Department, on_delete = models.CASCADE, verbose_name=u'受检部门/大队')
-    sub_department = models.ForeignKey(Sub_Department, on_delete = models.CASCADE, verbose_name=u'受检分部/分队')
+    sub_department = models.ForeignKey(Sub_Department, on_delete = models.CASCADE, verbose_name=u'受检分部/中队')
     team = models.ForeignKey(Team, on_delete = models.CASCADE, default = u'无', verbose_name=u'责任班组')
     responsible_person = models.CharField(max_length=100, verbose_name=u'责任人')
     information_Source = models.ForeignKey(Information_Source, on_delete = models.CASCADE, verbose_name=u'信息来源')
@@ -141,7 +141,8 @@ class qa_info(models.Model):
     state = models.ForeignKey(State, on_delete = models.CASCADE, verbose_name=u'关闭情况')
     scrutator = models.CharField(max_length=100, verbose_name=u'检查者')
     Appendix = models.FileField(upload_to='upload/%Y/%m/%d',blank=True, verbose_name=u'相关附件')
-    grade = models.DecimalField(max_digits=1, decimal_places=0,verbose_name = u'严重程度', blank= True, null=True)
+    grade = models.DecimalField(max_digits=1, decimal_places=0,verbose_name = u'评分', blank= True, null=True)
+    grade_human = models.DecimalField(max_digits=1, decimal_places=0, verbose_name=u'人工偏离分', blank=True, null=True)
 
     class Meta:
         ordering = ["-data"]
@@ -149,11 +150,22 @@ class qa_info(models.Model):
     def __str__(self):
         return self.problem_description
 
+
 class hr_info(models.Model):
     hr_employee_number = models.CharField(max_length=100, verbose_name=u'员工编号')
     hr_employee_name = models.CharField(max_length=100, verbose_name=u'员工姓名')
-    hr_department = models.ForeignKey(Department, on_delete = models.CASCADE, blank= True, null=True,verbose_name=u'受检单位')
-    hr_team = models.ForeignKey(Team, on_delete = models.CASCADE, blank= True, null=True, verbose_name=u'责任班组')
+    hr_department = models.ForeignKey(Department, on_delete = models.CASCADE, blank= True,
+                                      null=True,verbose_name=u'部门/大队')
+    hr_sub_department = models.ForeignKey(Sub_Department, on_delete=models.CASCADE, blank=True,
+                                          null=True, verbose_name=u'分部/中队')
+    hr_team = models.ForeignKey(Team, on_delete = models.CASCADE, blank= True, null=True,
+                                verbose_name=u'责任班组')
+    hr_staff_manager = models.CharField(max_length=10, verbose_name=u'是否干部', blank= True,
+                                        null=True)
+    hr_party = models.CharField(max_length=10, verbose_name=u'是否党员', blank= True,
+                                        null=True,)
+    hr_on_duty = models.CharField(max_length=10, verbose_name=u'是否在职检查者', blank= True,
+                                        null=True,)
 
     def __str__(self):
         return self.hr_employee_name
