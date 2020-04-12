@@ -7,7 +7,7 @@ import json
 import pandas as pd
 import arrow
 
-def return_df_chinese_data():
+def df_chinese_data():
     exclude_list = []
 
     query_data = qa_info.objects.all().order_by('-data')
@@ -73,5 +73,61 @@ def return_df_chinese_data():
     return chinese_updata
 
 def index(request):
-    upload_data = json.dumps(return_df_chinese_data())
+    upload_data = json.dumps(df_chinese_data())
     return render(request, 'background.html', {'json_data': upload_data})
+
+def month_count_group_by_department(request):
+    df_data = pd.DataFrame(df_chinese_data())
+    df_da = pd.DataFrame(df_chinese_data(), index=df_data[u'日期'])
+    string_index = df_data[u'日期']
+    # 计算出起止月份
+    start_day = string_index.min()
+    end_day = string_index.max()
+    start_ar = arrow.get(start_day)
+    end_ar = arrow.get(end_day)
+    print (end_ar)
+
+    if start_ar.day >= 26:
+        number_month = start_ar.month + 1
+    else:
+        number_month = start_ar.month
+    start_month = start_ar.replace(month=number_month)
+    if end_ar.day >= 26:
+        number_month = end_ar.month + 1
+    else:
+        number_month = end_ar.month + 1
+    end_month = end_ar.replace(months=number_month)
+    print (end_month)
+
+    list_month = []
+    list_month_count_scheduled = []
+    list_month_count_airline1 = []
+    list_month_count_airline2 = []
+
+    for r in arrow.Arrow.range('month', start_month, end_month):
+        year_month = r.format("YYYY-MM")
+        end = arrow.get(r)
+        end = end.replace(day=25)
+        start = end.replace(months=-1)
+        start = start.replace(day=26)
+        list_a_month = []
+        for r in arrow.Arrow.range('day', start, end):
+            a_day = r.format('YYYY-MM-DD')
+            list_a_month.append(a_day)
+        try:
+            df_month = df_da.loc[list_a_month]
+            list_month.append(year_month)
+            list_month_count_scheduled.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线一大队"].count())
+            list_month_count_airline1.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线二大队"].count())
+            list_month_count_airline2.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"重庆分公司"].count())
+        except:
+            continue
+
+    json_month = json.dumps(list_month)
+    json_count_scheduled = json.dumps(list_month_count_scheduled)
+    json_count_airline1 = json.dumps(list_month_count_airline1)
+    json_count_airline2 = json.dumps(list_month_count_airline2)
+    return render(request, "month_count_group_by_department.html", {"json_month": json_month,
+                                                                    "json_count_scheduled": json_count_scheduled,
+                                                                    "json_count_airline1": json_count_airline1,
+                                                                    "json_count_airline2": json_count_airline2})

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block maincontents %}
+<script src="/static/echart-3.2.1/echarts.js"></script>
+<div id="main" style="width: 900px;height:600px;"></div>
+
+<script type="text/javascript">
+        //console.log(static_down);
+        //console.log(static_up);
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+    	    title : {
+    	        text: '单位发现问题-根据受检单位分类',
+    	        subtext: '每月统计',
+    	        x:'center'
+    	    },
+    	    tooltip : {
+                show: false,
+    	        trigger: 'axis',
+    	        formatter: "{a} <br/>{b} : {c}"
+    	    },
+    	    legend: {
+    	        left: 'left',
+    	        data: ['定检', '航线一', '航线二','航线三']
+    	    },
+            dataZoom:{
+                show:true,
+                realtime:true,
+            },
+            xAxis: {
+                type: 'category',
+                data:{{json_month | safe}},
+                name:"月份"
+            },
+            yAxis:{
+                type:'value',
+                name:"数量"
+            },
+    	    series : [
+    	        {
+                    name: '定检',
+                    type: 'line',
+                    center: ['50%', '60%'],
+                    data:{{json_count_scheduled | safe}},
+                    itemStyle: {
+                        normal:{ 
+                            label:{ 
+                               show: true, 
+                               formatter: '{c}' 
+                            }, 
+                            labelLine :{show:true}
+                        }
+                    }
+                },
+                {
+                    name: '航线一',
+                    type: 'line',
+                    center: ['50%', '60%'],
+                    data:{{json_count_airline1 | safe}},
+                    itemStyle: {
+                        normal:{ 
+                            label:{ 
+                               show: true, 
+                               formatter: '{c}' 
+                            }, 
+                            labelLine :{show:true}
+                        }
+                    }
+                },
+                {
+                    name: '航线二',
+                    type: 'line',
+                    center: ['50%', '60%'],
+                    data:{{json_count_airline2 | safe}},
+                    itemStyle: {
+                        normal:{
+                            label:{
+                               show: true,
+                               formatter: '{c}'
+                            },
+                            labelLine :{show:true}
+                        }
+                    }
+                },
+                {
+                    name: '航线三',
+                    type: 'line',
+                    center: ['50%', '60%'],
+                    data:{{json_count_airline3 | safe}},
+                    itemStyle: {
+                        normal:{
+                            label:{
+                               show: true,
+                               formatter: '{c}'
+                            },
+                            labelLine :{show:true}
+                        }
+                    }
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+{% endblock %}
