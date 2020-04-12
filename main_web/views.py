@@ -103,6 +103,7 @@ def month_count_group_by_department(request):
     list_month_count_scheduled = []
     list_month_count_airline1 = []
     list_month_count_airline2 = []
+    list_month_count_airline3 = []
 
     for r in arrow.Arrow.range('month', start_month, end_month):
         year_month = r.format("YYYY-MM")
@@ -117,9 +118,10 @@ def month_count_group_by_department(request):
         try:
             df_month = df_da.loc[list_a_month]
             list_month.append(year_month)
-            list_month_count_scheduled.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线一大队"].count())
-            list_month_count_airline1.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线二大队"].count())
-            list_month_count_airline2.append(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"重庆分公司"].count())
+            list_month_count_scheduled.append(int(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线一大队"].count()))
+            list_month_count_airline1.append(int(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"成都航线二大队"].count()))
+            list_month_count_airline2.append(int(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"重庆分公司"].count()))
+            list_month_count_airline3.append(int(df_month[u'受检部门/大队'][df_month[u'受检部门/大队'] == u"贵阳分公司"].count()))
         except:
             continue
 
@@ -127,7 +129,9 @@ def month_count_group_by_department(request):
     json_count_scheduled = json.dumps(list_month_count_scheduled)
     json_count_airline1 = json.dumps(list_month_count_airline1)
     json_count_airline2 = json.dumps(list_month_count_airline2)
+    json_count_airline3 = json.dumps(list_month_count_airline3)
     return render(request, "month_count_group_by_department.html", {"json_month": json_month,
                                                                     "json_count_scheduled": json_count_scheduled,
                                                                     "json_count_airline1": json_count_airline1,
-                                                                    "json_count_airline2": json_count_airline2})
+                                                                    "json_count_airline2": json_count_airline2,
+                                                                    "json_count_airline3": json_count_airline3})
