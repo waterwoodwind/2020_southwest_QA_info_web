@@ -19,5 +19,6 @@ from main_web import views as main_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", main_views.index),
-    path("month_count_group_by_department", main_views.month_count_group_by_department)
+    path("month_count_group_by_department", main_views.month_count_group_by_department),
+    path("month_count_group_by_sub_department", main_views.month_count_group_by_sub_department),
 ]
