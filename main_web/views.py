@@ -301,10 +301,10 @@ def month_count_cq_group_by_sub_department(request):
         try:
             df_month = df_da.loc[list_a_month]
             list_month.append(year_month)
-            list_month_count_cd_1.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一一中队"].count()))
-            list_month_count_cd_2.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一二中队"].count()))
-            list_month_count_cq.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一三方中队"].count()))
-            list_month_count_gy.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一排故中队"].count()))
+            list_month_count_cd_1.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"重庆航线一中队"].count()))
+            list_month_count_cd_2.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"重庆航线二中队"].count()))
+            list_month_count_cq.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"重庆航线三中队"].count()))
+            list_month_count_gy.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"重庆定检中队"].count()))
         except:
             continue
 
@@ -362,8 +362,8 @@ def month_count_gy_group_by_sub_department(request):
         try:
             df_month = df_da.loc[list_a_month]
             list_month.append(year_month)
-            list_month_count_cd_1.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一一中队"].count()))
-            list_month_count_cd_2.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一二中队"].count()))
+            list_month_count_cd_1.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"航线中队/技术支援分部"].count()))
+            list_month_count_cd_2.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"客舱中队"].count()))
             list_month_count_cq.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一三方中队"].count()))
             list_month_count_gy.append(int(df_month[u'受检分部/中队'][df_month[u'受检分部/中队'] == u"成都航一排故中队"].count()))
         except:
