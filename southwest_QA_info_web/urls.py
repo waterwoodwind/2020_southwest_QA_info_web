@@ -20,5 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", main_views.index),
     path("month_count_group_by_department", main_views.month_count_group_by_department),
-    path("month_count_group_by_sub_department", main_views.month_count_group_by_sub_department),
+    path("month_count_cd1_group_by_sub_department", main_views.month_count_cd1_group_by_sub_department),
+    path("month_count_cd2_group_by_sub_department", main_views.month_count_cd2_group_by_sub_department),
+    path("month_count_cq_group_by_sub_department", main_views.month_count_cq_group_by_sub_department),
+    path("month_count_gy_group_by_sub_department", main_views.month_count_gy_group_by_sub_department),
 ]
