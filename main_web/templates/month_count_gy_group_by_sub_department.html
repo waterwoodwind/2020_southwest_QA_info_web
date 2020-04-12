@@ -27,7 +27,7 @@
     	        right: 10,
                 top: 20,
                 bottom: 20,
-    	        data: ['成都航一一中队', '成都航一二中队', '成都航一三方中队','成都航一排故中队']
+    	        data: ['航线中队/技术支援分部', '客舱中队']
     	    },
             dataZoom:{
                 show:true,
@@ -44,7 +44,7 @@
             },
     	    series : [
     	        {
-                    name: '成都航一一中队',
+                    name: '航线中队/技术支援分部',
                     type: 'line',
                     center: ['50%', '60%'],
                     data:{{json_count_cd_1 | safe}},
@@ -59,7 +59,7 @@
                     }
                 },
                 {
-                    name: '成都航一二中队',
+                    name: '客舱中队',
                     type: 'line',
                     center: ['50%', '60%'],
                     data:{{json_count_cd_2 | safe}},
@@ -73,36 +73,6 @@
                         }
                     }
                 },
-                {
-                    name: '成都航一三方中队',
-                    type: 'line',
-                    center: ['50%', '60%'],
-                    data:{{json_count_cq | safe}},
-                    itemStyle: {
-                        normal:{
-                            label:{
-                               show: true,
-                               formatter: '{c}'
-                            },
-                            labelLine :{show:true}
-                        }
-                    }
-                },
-                {
-                    name: '成都航一排故中队',
-                    type: 'line',
-                    center: ['50%', '60%'],
-                    data:{{json_count_gy | safe}},
-                    itemStyle: {
-                        normal:{
-                            label:{
-                               show: true,
-                               formatter: '{c}'
-                            },
-                            labelLine :{show:true}
-                        }
-                    }
-                }
             ]
         };
 
