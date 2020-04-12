@@ -96,7 +96,7 @@ def month_count_group_by_department(request):
         number_month = end_ar.month + 1
     else:
         number_month = end_ar.month + 1
-    end_month = end_ar.replace(months=number_month)
+    end_month = end_ar.shift(months=number_month)
     print (end_month)
 
     list_month = []
@@ -108,7 +108,7 @@ def month_count_group_by_department(request):
         year_month = r.format("YYYY-MM")
         end = arrow.get(r)
         end = end.replace(day=25)
-        start = end.replace(months=-1)
+        start = end.shift(months=-1)
         start = start.replace(day=26)
         list_a_month = []
         for r in arrow.Arrow.range('day', start, end):
