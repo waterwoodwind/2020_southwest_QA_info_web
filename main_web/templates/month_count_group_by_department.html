@@ -22,8 +22,12 @@
     	        formatter: "{a} <br/>{b} : {c}"
     	    },
     	    legend: {
-    	        left: 'left',
-    	        data: ['定检', '航线一', '航线二','航线三']
+    	        left: 'right',
+    	        orient: 'vertical',
+    	        right: 10,
+                top: 20,
+                bottom: 20,
+    	        data: ['成都航线一大队', '成都航线二大队', '重庆分公司','贵阳分公司']
     	    },
             dataZoom:{
                 show:true,
@@ -40,10 +44,10 @@
             },
     	    series : [
     	        {
-                    name: '定检',
+                    name: '成都航线一大队',
                     type: 'line',
                     center: ['50%', '60%'],
-                    data:{{json_count_scheduled | safe}},
+                    data:{{json_count_cd_1 | safe}},
                     itemStyle: {
                         normal:{ 
                             label:{ 
@@ -55,10 +59,10 @@
                     }
                 },
                 {
-                    name: '航线一',
+                    name: '成都航线二大队',
                     type: 'line',
                     center: ['50%', '60%'],
-                    data:{{json_count_airline1 | safe}},
+                    data:{{json_count_cd_2 | safe}},
                     itemStyle: {
                         normal:{ 
                             label:{ 
@@ -70,10 +74,10 @@
                     }
                 },
                 {
-                    name: '航线二',
+                    name: '重庆分公司',
                     type: 'line',
                     center: ['50%', '60%'],
-                    data:{{json_count_airline2 | safe}},
+                    data:{{json_count_cq | safe}},
                     itemStyle: {
                         normal:{
                             label:{
@@ -85,10 +89,10 @@
                     }
                 },
                 {
-                    name: '航线三',
+                    name: '贵阳分公司',
                     type: 'line',
                     center: ['50%', '60%'],
-                    data:{{json_count_airline3 | safe}},
+                    data:{{json_count_gy | safe}},
                     itemStyle: {
                         normal:{
                             label:{
