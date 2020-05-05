@@ -24,7 +24,6 @@ def grade_staff_year(request):
         df_data = pd.DataFrame(date_range_df_chinese_data(date_start,date_end))
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
         df_data = df_data.loc[df_data[u"评分"] != "None"]
-        df_data = df_data[df_data[u"评分"] > 0]
         df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
 
@@ -32,7 +31,6 @@ def grade_staff_year(request):
         df_data = pd.DataFrame(df_chinese_data())
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
         df_data = df_data.loc[df_data[u"评分"] != None]
-        df_data = df_data.loc[df_data[u"评分"] > 0]
         df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         print("!!---------")
         print(df_data)
@@ -63,7 +61,7 @@ def grade_staff_year(request):
             single_dict = {}
             single_dict[u"责任人"] = name
             single_dict[u"部门"] = department
-            single_dict[u"安全分"] = 100 - sum_single_person
+            single_dict[u"安全分"] = sum_single_person
             name_grade_department_list.append(single_dict)
     #print name_grade_department_list
     json_grade = json.dumps(name_grade_department_list)
@@ -86,7 +84,6 @@ def grade_department(request):
         df_data = pd.DataFrame(df_chinese_data())
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
         df_data = df_data.loc[df_data[u"评分"] != None]
-        df_data = df_data.loc[df_data[u"评分"] > 0]
         df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         print("!!---------")
         print(df_data)
@@ -115,9 +112,9 @@ def grade_department(request):
             sum_single_person = int(sum_single_person)
 
             # 人名、总分、部门压入name_grade_department_list
-            person_grade_list.append(100 - sum_single_person)
+            person_grade_list.append(sum_single_person)
         else:
-            person_grade_list.append(100)
+            person_grade_list.append(0)
         # print name_grade_department_list
     df_hr_info[u'安全分'] = person_grade_list
     df_agg = df_hr_info.groupby(u'部门').agg('mean').round(2)
@@ -126,6 +123,13 @@ def grade_department(request):
     df_dict = df_agg.to_dict('records')
     print (df_dict)
     json_grade = json.dumps(df_dict)
+    # 分部分数
+    df_sub_dep_mean = df_hr_info.groupby(u'分部').agg('mean').round(2)
+    print(df_sub_dep_mean)
+    df_sub_dep_mean_reset = df_sub_dep_mean.reset_index()
+    dict_sub_dep_mean = df_sub_dep_mean_reset.to_dict('records')
+    print(dict_sub_dep_mean)
+    sub_dep_mean = json.dumps(dict_sub_dep_mean)
     # 班组分数
     df_team_mean = df_hr_info.groupby(u'班组').agg('mean').round(2)
     print (df_team_mean)
@@ -134,4 +138,5 @@ def grade_department(request):
     print (dict_team_mean)
     team_mean = json.dumps(dict_team_mean)
     return render(request, 'grade_department.html', {'json_grade': json_grade,
+                                                     'json_sub_dep': sub_dep_mean,
                                                      'json_team':team_mean})

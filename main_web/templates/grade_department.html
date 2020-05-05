@@ -18,10 +18,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-4">
-            <div id="team_grade" ></div>
+            <div id="dep" ></div>
         </div>
         <div class="col-xs-4">
-            <div id="staff_all" ></div>
+            <div id="sub_dep" ></div>
+        </div>
+        <div class="col-xs-4">
+            <div id="team" ></div>
         </div>
     </div>
 </div><!-- /.container -->
@@ -112,7 +115,7 @@
 
 var data = new Array();
 data = {{ json_grade | safe}};
-var container = document.getElementById('team_grade');
+var container = document.getElementById('dep');
 var hot = new Handsontable(container, {
   data: data,
   rowHeaders: true,
@@ -132,9 +135,31 @@ var hot = new Handsontable(container, {
   }
 });
 
+var data_sub_dep = new Array();
+data_sub_dep = {{ json_sub_dep | safe}};
+var container = document.getElementById('sub_dep');
+var hot = new Handsontable(container, {
+  data: data_sub_dep,
+  rowHeaders: true,
+  colHeaders: [ '分部', '安全分'],
+  columns: [
+      {data: '分部'},
+      {data: '安全分'},
+    ],
+  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
+  readOnly: true,
+  colWidths: [90, 90, 90],
+  filters: true,
+  height: getHeight()-200,
+  columnSorting: {
+    column: 1,
+    sortOrder: false
+  }
+});
+
 var data_team = new Array();
 data_team = {{ json_team | safe}};
-var container = document.getElementById('staff_all');
+var container = document.getElementById('team');
 var hot = new Handsontable(container, {
   data: data_team,
   rowHeaders: true,
