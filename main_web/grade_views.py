@@ -70,7 +70,7 @@ def grade_staff_year(request):
     return render(request, 'grade_staff_year.html', {'json_grade': json_grade})
 
 
-def department_grade(request):
+def grade_department(request):
     if request.method == 'POST':
         post_data = request.POST
         date_range = post_data["date_range"]
@@ -133,5 +133,5 @@ def department_grade(request):
     dict_team_mean = df_team_mean_reset.to_dict('records')
     print (dict_team_mean)
     team_mean = json.dumps(dict_team_mean)
-    return render(request, 'department_grade.html', {'json_grade': json_grade,
+    return render(request, 'grade_department.html', {'json_grade': json_grade,
                                                      'json_team':team_mean})

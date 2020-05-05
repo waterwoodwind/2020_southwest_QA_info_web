@@ -27,5 +27,5 @@ urlpatterns = [
     path("month_count_gy_group_by_sub_department", main_views.month_count_gy_group_by_sub_department),
     # grade
     path("grade_staff_year", grade_views.grade_staff_year),
-    path("department_grade", grade_views.department_grade),
+    path("grade_department", grade_views.grade_department),
 ]
