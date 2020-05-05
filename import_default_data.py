@@ -1,7 +1,7 @@
 #coding=utf-8
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qa_web.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "southwest_QA_info_web.settings")
 
 import django
 django.setup()
@@ -73,33 +73,37 @@ def import_hr_info():
 
 def import_hr_info_team():
     objectList = []
-    f = codecs.open(u'人岗 按数据库department匹配名 含班组.csv', "r", "utf-8")
+    f = open(u'重庆 航线三 人事.csv', "r")
     # f = open(u'人岗 按数据库department匹配名 含班组.csv','r', 'utf-8')
     print (f)
     s = f.readlines()
     print (s)
     for line in s:
+        hr_object = hr_info()
         print (line)
         item_list = line.split(',')
-        employee_number, employee_name, department, team = item_list[0], item_list[1], item_list[2], item_list[3]
+        employee_number, employee_name, department, sub_department = item_list[0], item_list[1], item_list[2], item_list[3]
         if employee_number == u'\ufeff338747':
             employee_number = u'338747'
-        department_id = Department.objects.get(name=department)
-        employee_number = employee_number.zfill(8)
 
-        #print type(employee_number), employee_number
-        team = team.strip()
+        employee_number = employee_number.zfill(8)
+        sub_department = sub_department.strip()
         employee_number = employee_number.strip()
+        department_id = Department.objects.get(name=department)
+        sub_department_id = Sub_Department.objects.get(name=sub_department)
         #print employee_number, team
         #print type(team)
         #print team == u'无'
         # print chardet.detect(team)
         # print chardet.detect(department)
-        team_id = Team.objects.get(name=team)
+
         # print employee_number, team_id
-        hr_object = hr_info.objects.get(hr_employee_number=employee_number)
-        hr_object.hr_team = team_id
-        # objectList.append(hr_object)
+        #hr_object = hr_info.objects.get(hr_employee_number=employee_number)
+        hr_object.hr_employee_number = employee_number
+        hr_object.hr_employee_name = employee_name
+        hr_object.hr_department = department_id
+        hr_object.hr_sub_department = sub_department_id
+        objectList.append(hr_object)
         hr_object.save()
     f.close()
 
@@ -114,5 +118,5 @@ if __name__ == "__main__":
     import_model("Team.txt", Team)
     import_model("State.txt", State)
     '''
-    import_hr_info()
+    import_hr_info_team()
     print('Done!')
