@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main_web import views as main_views
+from main_web import grade_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", main_views.index),
@@ -24,4 +25,7 @@ urlpatterns = [
     path("month_count_cd2_group_by_sub_department", main_views.month_count_cd2_group_by_sub_department),
     path("month_count_cq_group_by_sub_department", main_views.month_count_cq_group_by_sub_department),
     path("month_count_gy_group_by_sub_department", main_views.month_count_gy_group_by_sub_department),
+    # grade
+    path("grade_staff_year", grade_views.grade_staff_year),
+    path("department_grade", grade_views.department_grade),
 ]
