@@ -2,7 +2,7 @@ from django.contrib import admin
 from main_web.models import *
 
 import re
-import chardet
+
 
 #admin 管理面板
 class qa_infoAdmin(admin.ModelAdmin):
@@ -20,14 +20,10 @@ class qa_infoAdmin(admin.ModelAdmin):
             #print (type(line))
             lines = line.split(',')
             lines[1] = lines[1].strip("\n")
-            print (lines[0], lines[1], chardet.detect(str.encode(lines[0])), type(lines[1]))
             pos.append(lines)
             dict_grade[lines[0]] = lines[1]
         f_txt.close()
         sub_information_classification = obj.sub_information_classification.name
-        print ("sub",sub_information_classification, chardet.detect(str.encode(sub_information_classification)))
-        #sub_information_classification = sub_information_classification.encode("utf-8")
-        print (sub_information_classification)
 
 
         if dict_grade.get(sub_information_classification):
