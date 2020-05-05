@@ -22,16 +22,20 @@ def grade_staff_year(request):
         date_end = date_range.split(' to ')[1]
         print (date_start,date_end)
         df_data = pd.DataFrame(date_range_df_chinese_data(date_start,date_end))
+        df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
+        df_data = df_data.loc[df_data[u"评分"] != "None"]
         df_data = df_data[df_data[u"评分"] > 0]
         df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
 
     else:
         df_data = pd.DataFrame(df_chinese_data())
-        df_data = df_data[df_data[u"评分"] > 0]
-        df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
-
+        df_data = df_data.loc[df_data[u"评分"] != None]
+        df_data = df_data.loc[df_data[u"评分"] > 0]
+        df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
+        print("!!---------")
+        print(df_data)
     if df_data.empty:
         return HttpResponse(u"该时间范围内无数据，请返回上一页")
 
@@ -79,7 +83,13 @@ def department_grade(request):
         df_data[[u"严重程度"]] = df_data[[u"严重程度"]].apply(pd.to_numeric)
 
     else:
-        df_data = pd.DataFrame
+        df_data = pd.DataFrame(df_chinese_data())
+        df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
+        df_data = df_data.loc[df_data[u"评分"] != None]
+        df_data = df_data.loc[df_data[u"评分"] > 0]
+        df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
+        print("!!---------")
+        print(df_data)
 
     if df_data.empty:
         return HttpResponse(u"该时间范围内无数据，请返回上一页")
@@ -101,7 +111,7 @@ def department_grade(request):
         if not df_single_person.empty:
             #print df_single_person
         # 对df_single_person合并总分
-            sum_single_person = df_single_person[u"严重程度"].sum()
+            sum_single_person = df_single_person[u"评分"].sum()
             sum_single_person = int(sum_single_person)
 
             # 人名、总分、部门压入name_grade_department_list

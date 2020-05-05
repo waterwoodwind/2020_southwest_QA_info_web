@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block maincontents %}
+<!-- 时期选择 -->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-xs-3">
+            <form id="daterange_query" action="" method="post" role="form">
+                {% csrf_token %}
+                <label class="control-label">
+                时间范围：
+                </label>
+                <input id="reportrange" class="form-control" name="date_range" placeholder="请点击选择">
+            </form>
+            <br>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">
+            <div id="team_grade" ></div>
+        </div>
+        <div class="col-xs-4">
+            <div id="staff_all" ></div>
+        </div>
+    </div>
+</div><!-- /.container -->
+
+<script type="text/javascript" src="/static/daterangepicker/moment.js"></script>
+<script type="text/javascript" src="/static/daterangepicker/daterangepicker-1.3.7.js"></script>
+<link rel="stylesheet" href="/static/daterangepicker/daterangepicker-bs3.css" />
+<link rel="stylesheet" href="/static/daterangepicker/daterangepicker-1.3.7.css" />
+<script type="text/javascript">
+        $(document).ready(function (){
+                    //时间插件
+                $('#reportrange span').html(moment().subtract('hours', 1).format('YYYY-MM-DD HH:mm:ss') + ' - ' + moment().format('YYYY-MM-DD HH:mm:ss'));
+
+                $('#reportrange').daterangepicker(
+                            {
+                                // startDate: moment().startOf('day'),
+                                //endDate: moment(),
+                                //minDate: '01/01/2012',    //最小时间
+                                maxDate : moment(), //最大时间
+                                dateLimit : {
+                                    days : 360
+                                }, //起止时间的最大间隔
+                                showDropdowns : true,
+                                showWeekNumbers : false, //是否显示第几周
+                                //timePicker : true, //是否显示小时和分钟
+                                timePickerIncrement : 60, //时间的增量，单位为分钟
+                                timePicker12Hour : false, //是否使用12小时制来显示时间
+                                ranges : {
+                                    //'最近1小时': [moment().subtract('hours',1), moment()],
+                                    '今日': [moment().startOf('day'), moment()],
+                                    '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                                    '最近7日': [moment().subtract('days', 6), moment()],
+                                    '最近30日': [moment().subtract('days', 29), moment()]
+                                },
+                                opens : 'right', //日期选择框的弹出位置
+                                buttonClasses : [ 'btn btn-default' ],
+                                applyClass : 'btn-small btn-primary blue',
+                                cancelClass : 'btn-small',
+                                format : 'YYYY-MM-DD', //控件中from和to 显示的日期格式
+                                separator : ' to ',
+                                locale : {
+                                    applyLabel : '确定',
+                                    cancelLabel : '取消',
+                                    fromLabel : '起始时间',
+                                    toLabel : '结束时间',
+                                    customRangeLabel : '自定义',
+                                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                                            '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                                    firstDay : 1
+                                }
+                            }, function(start, end, label) {//格式化日期显示框
+
+                                $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+
+                           });
+
+                //设置日期菜单被选项  --开始--
+                  var dateOption ;
+                  if("${riqi}"=='day') {
+                        dateOption = "今日";
+                  }else if("${riqi}"=='yday') {
+                        dateOption = "昨日";
+                  }else if("${riqi}"=='week'){
+                        dateOption ="最近7日";
+                  }else if("${riqi}"=='month'){
+                        dateOption ="最近30日";
+                  }else if("${riqi}"=='year'){
+                        dateOption ="最近一年";
+                  }else{
+                        dateOption = "自定义";
+                  }
+                   $(".daterangepicker").find("li").each(function (){
+                        if($(this).hasClass("active")){
+                            $(this).removeClass("active");
+                        }
+                        if(dateOption==$(this).html()){
+                            $(this).addClass("active");
+                        }
+                  });
+                       //设置日期菜单被选项  --结束--
+                       //选择时间后触发重新加载的方法
+           $("#reportrange").on('apply.daterangepicker',function(){
+               //当选择时间后，出发dt的重新加载数据的方法
+               document.getElementById("daterange_query").submit()
+           });
+        })
+
+var data = new Array();
+data = {{ json_grade | safe}};
+var container = document.getElementById('team_grade');
+var hot = new Handsontable(container, {
+  data: data,
+  rowHeaders: true,
+  colHeaders: [ '部门', '安全分'],
+  columns: [
+      {data: '部门'},
+      {data: '安全分'},
+    ],
+  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
+  readOnly: true,
+  colWidths: [90, 90, 90],
+  filters: true,
+  height: getHeight()-200,
+  columnSorting: {
+    column: 1,
+    sortOrder: false
+  }
+});
+
+var data_team = new Array();
+data_team = {{ json_team | safe}};
+var container = document.getElementById('staff_all');
+var hot = new Handsontable(container, {
+  data: data_team,
+  rowHeaders: true,
+  colHeaders: [ '班组', '安全分'],
+  columns: [
+      {data: '班组'},
+      {data: '安全分'},
+    ],
+  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
+  readOnly: true,
+  colWidths: [90, 90, 90],
+  filters: true,
+  height: getHeight()-200,
+  columnSorting: {
+    column: 1,
+    sortOrder: false
+  }
+});
+
+function getHeight() {
+        return $(window).height() - $('nav').outerHeight(true) * 2;
+    }
+
+</script>
+
+{% endblock %}
