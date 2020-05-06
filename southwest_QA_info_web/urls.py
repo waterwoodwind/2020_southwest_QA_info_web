@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from main_web import views as main_views
 from main_web import grade_views
+from main_web import get_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", main_views.index),
@@ -28,4 +30,6 @@ urlpatterns = [
     # grade
     path("grade_staff_year", grade_views.grade_staff_year),
     path("grade_department", grade_views.grade_department),
+    # 由一级分类获取二级分类
+    path('get_sub_class/<int:obj_id>', get_views.get_sub_class, name='add2'),
 ]

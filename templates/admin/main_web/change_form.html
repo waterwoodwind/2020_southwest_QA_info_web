@@ -13,24 +13,27 @@
             select.change(function(){
                 console.log("value change"+django.jQuery(this).val());
                 var target = django.jQuery("#id_sub_information_classification");
-                target.empty();//先要清空一下
-                /*
-                var url = "/report/sub_servers/"+django.jQuery(this).val();//能够正确的访问到view的url
-                {#console.log(url);#}
+
+
+                var url = "/get_sub_class/"+django.jQuery(this).val();//能够正确的访问到view的url
+                console.log(url);
                 django.jQuery.get(
                     url,
                     function(data){
-                        var target = django.jQuery("#id_server_ip_id");
+                        var target = django.jQuery("#id_sub_information_classification");
                         target.empty();//先要清空一下
+                        console.log(target);
+                        console.log(data);
                         data.forEach(function(e){
                             // 将从view得到的id和db_user名称赋值给db_server的select
                             console.log(e,e.id,e.name);
                             target.append("<option value='"+e.id+"'>"+e.name+"<option>");
                             target.eq(0).attr('selected', 'true');
                         });
+
                     })
 
-                */
+
                 });
             });
     </script>
