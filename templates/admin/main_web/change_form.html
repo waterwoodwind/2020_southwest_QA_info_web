@@ -22,12 +22,12 @@
                     function(data){
                         var target = django.jQuery("#id_sub_information_classification");
                         target.empty();//先要清空一下
-                        console.log(target);
+                        console.log(target.eq(0));
                         console.log(data);
                         data.forEach(function(e){
                             // 将从view得到的id和db_user名称赋值给db_server的select
                             console.log(e,e.id,e.name);
-                            target.append("<option value='"+e.id+"'>"+e.name+"<option>");
+                            target.append("<option value='"+e.id+"'>"+e.name+"</option>");
                             target.eq(0).attr('selected', 'true');
                         });
 
