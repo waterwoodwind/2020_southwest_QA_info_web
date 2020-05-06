@@ -8,6 +8,8 @@ import re
 class qa_infoAdmin(admin.ModelAdmin):
     list_display = ('data', 'problem_description', 'department', 'sub_department', 'responsible_person',)
     list_display_links = ('data', 'problem_description', 'department', 'sub_department',)
+    #如果没有按规则放则需单独声明
+    #change_form_template = 'admin/main_web/mymodel/change_list.html'
     def save_model(self, request, obj, form, change):
         filename = r'grade.csv'
         pos = []
