@@ -11,30 +11,22 @@ class qa_infoAdmin(admin.ModelAdmin):
     #如果没有按规则放则需单独声明
     #change_form_template = 'admin/main_web/mymodel/change_list.html'
     def save_model(self, request, obj, form, change):
-        filename = r'grade.csv'
-        pos = []
-        dict_grade = {}
-        dict_grade.setdefault('找不到', )
-        f_txt = open(filename, 'r')
-        f_txt.readline()
-        for line in f_txt:
-            #print (line)
-            #print (type(line))
-            lines = line.split(',')
-            lines[1] = lines[1].strip("\n")
-            pos.append(lines)
-            dict_grade[lines[0]] = lines[1]
-        f_txt.close()
+
         sub_information_classification = obj.sub_information_classification.name
 
-
-        if dict_grade.get(sub_information_classification):
-            obj.grade = dict_grade[sub_information_classification]
+        try:
+            sub_in_class_obj = Sub_Information_classification.objects.get(name = sub_information_classification)
+            sub_value = sub_in_class_obj.value
+            obj.grade = sub_value
             #print (sub_information_classification.encode('gb2312'))
-        else:
+        except Sub_Information_classification.DoesNotExist:
+
             print (' NO MATCH')
 
+
+
         print (obj.grade)
+
         obj.save()
 
 class hr_infoAdmin(admin.ModelAdmin):
