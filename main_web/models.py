@@ -87,6 +87,9 @@ class Information_classification(models.Model):
 
 class Sub_Information_classification(models.Model):
     name = models.CharField(max_length=50)
+    information_classification = models.ForeignKey(Information_classification, on_delete=models.CASCADE,
+                                                   verbose_name=u'问题分类')
+    value = models.DecimalField(max_digits=1, decimal_places=0, verbose_name=u'分值', blank=True, null=True)
 
     def natural_key(self):
         return (self.name)
