@@ -13,15 +13,15 @@ class qa_infoAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
 
         sub_information_classification = obj.sub_information_classification.name
+        if obj.grade == None:
+            try:
+                sub_in_class_obj = Sub_Information_classification.objects.get(name = sub_information_classification)
+                sub_value = sub_in_class_obj.value
+                obj.grade = sub_value
+                #print (sub_information_classification.encode('gb2312'))
+            except Sub_Information_classification.DoesNotExist:
 
-        try:
-            sub_in_class_obj = Sub_Information_classification.objects.get(name = sub_information_classification)
-            sub_value = sub_in_class_obj.value
-            obj.grade = sub_value
-            #print (sub_information_classification.encode('gb2312'))
-        except Sub_Information_classification.DoesNotExist:
-
-            print (' NO MATCH')
+                print (' NO MATCH')
 
 
 
