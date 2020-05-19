@@ -39,7 +39,7 @@ var hot = new Handsontable(container, {
   rowHeaders: true,
   colHeaders: ['日期', '地点', '时间', '受检部门/大队', '受检分部/中队', '责任班组', '责任人', '检查者', '信息来源',
    '问题分类', '问题二级分类', '发生阶段', '问题描述', '整改措施', '处理意见', '关闭情况' , '相关附件', '评分',
-    '人工偏离分', '操作'],
+    '操作'],
   columns: [
         {data: '日期',
         type: 'date',
@@ -62,13 +62,12 @@ var hot = new Handsontable(container, {
         {data: '相关附件',
         renderer: 'html',},
         {data: '评分'},
-        {data: '人工偏离分'},
         {data: 'ID',
         renderer: 'html',},
     ],
   dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
   readOnly: true,
-  colWidths: [65, 65, 65, 115, 115, 88, 88, 88, 88, 88, 120, 88, 220, 202, 88, 88, 65, 88, 88, 88,88],
+  colWidths: [65, 65, 65, 115, 115, 88, 88, 88, 88, 88, 120, 88, 220, 202, 88, 88, 65, 88, 88,88],
   filters: true,
   height: getHeight()
 });
