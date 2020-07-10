@@ -11,7 +11,6 @@ from time import time
 from django_pandas.io import read_frame
 
 def df_chinese_data():
-
     query_data = qa_info.objects.all().order_by('-data')
     df = read_frame(query_data, verbose = True, coerce_float = False)
     df.columns=["ID",
@@ -34,7 +33,7 @@ def df_chinese_data():
                 "相关附件",
                 "评分"]
     #print(df)
-    print("1")
+    print("chinese_updata")
     df["日期"] = df["日期"].apply(lambda x: x.strftime("%Y-%m-%d"))
     chinese_updata = df.to_json(orient='records', force_ascii = False, date_format = 'iso')
     chinese_updata = json.loads(chinese_updata)
@@ -109,10 +108,12 @@ def date_range_df_chinese_data(date_start, date_end):
 
 
 def index(request):
+    print("index")
     upload_data = json.dumps(df_chinese_data())
     return render(request, 'background.html', {'json_data': upload_data})
 
 def month_count_group_by_department(request):
+    print("month_count_group_by_department")
     df_data = pd.DataFrame(df_chinese_data())
     df_da = pd.DataFrame(df_chinese_data(), index=df_data[u'日期'])
     string_index = df_data[u'日期']
