@@ -18,10 +18,14 @@ from django.urls import path
 from main_web import views as main_views
 from main_web import grade_views
 from main_web import get_views
+# 给tooldebug bar
+from django.conf import settings
+from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", main_views.index),
+    path("home", main_views.index),
     path("month_count_group_by_department", main_views.month_count_group_by_department),
     path("month_count_cd1_group_by_sub_department", main_views.month_count_cd1_group_by_sub_department),
     path("month_count_cd2_group_by_sub_department", main_views.month_count_cd2_group_by_sub_department),
@@ -33,3 +37,10 @@ urlpatterns = [
     # 由一级分类获取二级分类
     path('get_sub_class/<int:obj_id>', get_views.get_sub_class, name='add2'),
 ]
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
