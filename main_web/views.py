@@ -427,13 +427,9 @@ class LocationAutoComplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:  # 这里校验是否为登录用户
             return Location.objects.none()
 
-        print("self q:")
-        print (self.q)
-
         qs = Location.objects.all()
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
-
-        # qs = qs.filter(Q(id__icontains=self.q) | Q(name__icontains=self.q))  # 复选框搜索条件(id 和 名称)
+            # 复选框搜索条件(以XX开头或包含XX名称) 以XX开头的名称条件，可以让列表初始化显示全部
+            qs = qs.filter(Q(name__istartswith=self.q)| Q(name__icontains=self.q))
         print(qs)
         return qs
