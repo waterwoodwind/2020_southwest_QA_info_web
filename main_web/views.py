@@ -431,5 +431,4 @@ class LocationAutoComplete(autocomplete.Select2QuerySetView):
         if self.q:
             # 复选框搜索条件(以XX开头或包含XX名称) 以XX开头的名称条件，可以让列表初始化显示全部
             qs = qs.filter(Q(name__istartswith=self.q)| Q(name__icontains=self.q))
-        print(qs)
         return qs
