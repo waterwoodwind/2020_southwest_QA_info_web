@@ -21,6 +21,10 @@ from main_web import get_views
 # 给tooldebug bar
 from django.conf import settings
 from django.urls import include
+# django-autocomplete-light
+from dal import autocomplete
+from django.conf.urls import url
+from main_web.models import Location,State
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +40,17 @@ urlpatterns = [
     path("grade_department", grade_views.grade_department),
     # 由一级分类获取二级分类
     path('get_sub_class/<int:obj_id>', get_views.get_sub_class, name='add2'),
+    # django-autocomplete-light
+    url(
+        r'^location-autocomplete/$',
+        main_views.LocationAutoComplete.as_view(),
+        name='location-autocomplete',
+        ),
+    url(
+        'report/$',
+        autocomplete.Select2QuerySetView.as_view(model=State),
+        name='state',
+    )
 ]
 
 

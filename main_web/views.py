@@ -9,6 +9,10 @@ import arrow
 from time import time
 
 from django_pandas.io import read_frame
+# autocomplete
+from dal import autocomplete
+from django.db.models import Q
+from main_web.models import Location
 
 def df_chinese_data():
     query_data = qa_info.objects.all().order_by('-data')
@@ -416,3 +420,20 @@ def month_count_gy_group_by_sub_department(request):
                                                                     "json_count_cd_2": json_count_cd_2,
                                                                     "json_count_cq": json_count_cq,
                                                                     "json_count_gy": json_count_gy})
+
+
+class LocationAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:  # 这里校验是否为登录用户
+            return Location.objects.none()
+
+        print("self q:")
+        print (self.q)
+
+        qs = Location.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        # qs = qs.filter(Q(id__icontains=self.q) | Q(name__icontains=self.q))  # 复选框搜索条件(id 和 名称)
+        print(qs)
+        return qs

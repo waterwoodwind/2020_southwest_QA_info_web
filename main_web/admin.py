@@ -1,11 +1,14 @@
 from django.contrib import admin
 from main_web.models import *
-
+# auto complete
+from main_web.forms import qa_infoForm
 import re
 
 
 #admin 管理面板
 class qa_infoAdmin(admin.ModelAdmin):
+    # autocomplete 使用 forms.py 中定义的 UserProjectRelationshipForm
+    form = qa_infoForm
     list_display = ('data', 'problem_description', 'department', 'sub_department', 'responsible_person',)
     list_display_links = ('data', 'problem_description', 'department', 'sub_department',)
     #如果没有按规则放则需单独声明
