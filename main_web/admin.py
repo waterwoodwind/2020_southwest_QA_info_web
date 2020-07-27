@@ -38,19 +38,55 @@ class hr_infoAdmin(admin.ModelAdmin):
     list_display_links = ('hr_employee_name',)
 
 class sub_information_classificationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'information_classification','value')
-    list_display_links = ('name', 'information_classification','value')
+    list_display = ('name', 'information_classification','value', 'order')
+    list_display_links = ('name', 'information_classification','value', 'order')
+
+class Location_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Time_Bucket_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Department_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Sub_Department_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Team_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Information_Source_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Information_classification_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class State_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
+
+class Event_class_Admin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_display_links = ('name', 'order')
 
 # Register your models here.
 admin.site.register(hr_info, hr_infoAdmin)
 admin.site.register(qa_info, qa_infoAdmin)
-admin.site.register(Location)
-admin.site.register(Time_Bucket)
-admin.site.register(Department)
-admin.site.register(Sub_Department)
-admin.site.register(Team)
-admin.site.register(Information_Source)
-admin.site.register(Information_classification)
+admin.site.register(Location, Location_Admin)
+admin.site.register(Time_Bucket, Time_Bucket_Admin)
+admin.site.register(Department, Department_Admin)
+admin.site.register(Sub_Department, Sub_Department_Admin)
+admin.site.register(Team, Team_Admin)
+admin.site.register(Information_Source, Information_Source_Admin)
+admin.site.register(Information_classification, Information_classification_Admin)
 admin.site.register(Sub_Information_classification, sub_information_classificationAdmin)
-admin.site.register(Event_class)
-admin.site.register(State)
+admin.site.register(Event_class, Event_class_Admin)
+admin.site.register(State, State_Admin)

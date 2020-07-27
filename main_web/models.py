@@ -3,84 +3,105 @@ from django.db import models
 # Create your models here.
 class Location(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Time_Bucket(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length = 50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Sub_Department(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Information_Source(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Information_classification(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
@@ -90,24 +111,30 @@ class Sub_Information_classification(models.Model):
     information_classification = models.ForeignKey(Information_classification, on_delete=models.CASCADE,
                                                    verbose_name=u'问题分类')
     value = models.DecimalField(max_digits=1, decimal_places=0, verbose_name=u'分值', blank=True, null=True)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 class Event_class(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
@@ -115,12 +142,15 @@ class Event_class(models.Model):
 
 class State(models.Model):
     name = models.CharField(max_length=50)
+    order = models.DecimalField(default=1000, max_digits=8, decimal_places=3,
+                                null=False, blank=False)
 
     def natural_key(self):
         return (self.name)
 
     class Meta:
         unique_together = (('name'),)
+        ordering = ['order']
 
     def __str__(self):
         return self.name
