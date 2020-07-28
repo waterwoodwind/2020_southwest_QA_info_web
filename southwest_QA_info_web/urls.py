@@ -38,6 +38,7 @@ urlpatterns = [
     # grade
     path("grade_staff_year", grade_views.grade_staff_year),
     path("grade_department", grade_views.grade_department),
+    path("grade_scrutator",  grade_views.grade_scrutator),
     # 由一级分类获取二级分类
     path('get_sub_class/<int:obj_id>', get_views.get_sub_class, name='add2'),
     # django-autocomplete-light
