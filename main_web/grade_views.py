@@ -14,6 +14,9 @@ from main_web.views import df_chinese_data
 from main_web.func_for_grade_views import get_hr_info
 from main_web.func_for_grade_views import get_hr_info_df
 
+# 计时器优化速度
+import time
+
 def grade_staff_year(request):
     if request.method == 'POST':
         post_data = request.POST
@@ -33,7 +36,7 @@ def grade_staff_year(request):
         df_data = df_data.loc[df_data[u"评分"] != None]
         df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
         print("!!---------")
-        print(df_data)
+        # print(df_data)
     if df_data.empty:
         return HttpResponse(u"该时间范围内无数据，请返回上一页")
 
@@ -42,7 +45,10 @@ def grade_staff_year(request):
     # 获取输入时间，对df_data按时间截取一次
     # 创建name_grade_department_list
     name_grade_department_list = []
+    hr_time = time.time()
     list_hr_info = get_hr_info()
+    hr_end_time = time.time()
+    print(hr_end_time - hr_time)
 
     # 人员list for 循环
     for i,element in enumerate(list_hr_info):
@@ -63,6 +69,7 @@ def grade_staff_year(request):
             single_dict[u"部门"] = department
             single_dict[u"安全分"] = sum_single_person
             name_grade_department_list.append(single_dict)
+    print(time.time()- hr_end_time)
     #print name_grade_department_list
     json_grade = json.dumps(name_grade_department_list)
     return render(request, 'grade_staff_year.html', {'json_grade': json_grade})
@@ -76,9 +83,9 @@ def grade_department(request):
         date_end = date_range.split(' to ')[1]
         print (date_start, date_end)
         df_data = pd.DataFrame(date_range_df_chinese_data(date_start, date_end))
-        df_data = df_data[df_data[u"严重程度"] > 0]
-        df_data = df_data.loc[:, [u"责任人", u"检查者", u"严重程度"]]
-        df_data[[u"严重程度"]] = df_data[[u"严重程度"]].apply(pd.to_numeric)
+        df_data = df_data[df_data[u"评分"] > 0]
+        df_data = df_data.loc[:, [u"责任人", u"检查者", u"评分"]]
+        df_data[[u"评分"]] = df_data[[u"评分"]].apply(pd.to_numeric)
 
     else:
         df_data = pd.DataFrame(df_chinese_data())
