@@ -77,7 +77,7 @@ def date_range_df_chinese_data(date_start, date_end):
 def index(request):
     print("index")
     upload_data = json.dumps(df_chinese_data())
-    return render(request, 'background.html', {'json_data': upload_data})
+    return render(request, 'home.html', {'json_data': upload_data})
 
 def month_count_group_by_department(request):
     print("month_count_group_by_department")

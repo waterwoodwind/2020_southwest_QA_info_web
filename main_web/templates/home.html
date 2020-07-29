@@ -1,473 +1,204 @@
 {% extends "base.html" %}
 {% block maincontents %}
-
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">单位发现问题</h3>
-	</div>
-	<div class="panel-body">
-		<script src="/static/echart-3.2.1/echarts.js"></script>
-		<div id="main" style="width: 900px;height:300px;"></div>
-
-		<script type="text/javascript">
-        var count_data = {{json_count | safe}};
-        var mean_data = new Array();
-        for (var i = 0;i<count_data.length;i++){
-            var sum = 0;
-            for (var j = 0;j<=i;j++){
-                sum = sum + count_data[j];
-            }
-            mean = sum/(i+1);
-            mean_data.push(mean);
-        }
-        mean_data.pop();
-        console.log(mean_data);
-        var static_down = mean_data.map(function (item){
-            return parseInt(item - 3 * Math.sqrt(item));
-        });
-        var static_up = mean_data.map(function (item){
-            return parseInt(6 * Math.sqrt(item));
-        });
-        //用于上限的数值显示
-        var static_up_value = static_down.map(function (item, i){
-            return item + static_up[i];
-        });
-        //console.log(static_down);
-        //console.log(static_up);
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
-
-        // 指定图表的配置项和数据
-        var option = {
-    	    title : {
-    	        text: '单位发现问题',
-    	        subtext: '每月统计',
-    	        x:'center'
-    	    },
-    	    tooltip : {
-                show: false,
-    	        trigger: 'axis',
-    	        formatter: "{a} <br/>{b} : {c}"
-    	    },
-    	    legend: {
-    	        left: 'left',
-    	        data: ['发现问题数']
-    	    },
-            dataZoom:{
-                show:true,
-                realtime:true,
-                start: 50,
-                end: 95
-            },
-            xAxis: {
-                type: 'category',
-                data:{{json_month | safe}},
-                name:"月份"
-            },
-            yAxis:{
-                type:'value',
-                name:"数量",
-                min:100,
-                max:240,
-            },
-    	    series : [
-                {
-                    name: '下线',
-                    type: 'line',
-                    data: static_down,
-                    lineStyle: {
-                        normal: {
-                            opacity: 0
-                        }
-                    },
-                    stack: 'confidence-band',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top'
-                        }
-                    },
-                }, {
-                    name: '上线',
-                    type: 'line',
-                    data: static_up,
-                    lineStyle: {
-                        normal: {
-                            opacity: 0
-                        }
-                    },
-                    areaStyle: {
-                        normal: {
-                            color: '#ccc'
-                        }
-                    },
-                    stack: 'confidence-band',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top',
-                            //显示上限的真实值
-                            formatter: function (params) {
-                                    return static_up_value[params['dataIndex']];
-                            }
-                        }
-                    },
-                },
-    	        {
-                    name: '发现问题数',
-                    type: 'line',
-                    center: ['50%', '60%'],
-                    data:{{json_count | safe}},
-                    itemStyle: {
-                        normal:{ 
-                            label:{ 
-                               show: true, 
-                               formatter: '{c}' 
-                            }, 
-                            labelLine :{show:true}
-                        }
-                    }
-                }
-            ]
-        };
-
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-		</script>
-	</div>
-</div>
-
-<div class="panel panel-success">
-	<div class="panel-heading">
-		<h3 class="panel-title">
-			检查者
-		</h3>
-	</div>
-	<div class="panel-body">
-	    <div class="row">
-	        <div class="col-xs-3">
-	            <form id="daterange_query" action="" method="post" role="form">
-	                {% csrf_token %}        
-	                <label class="control-label">
-	                时间范围：
-	                </label>
-	                <input id="reportrange" class="form-control" name="date_range" placeholder="请点击选择">
-	            </form>
-	            <br>
-	        </div>
-	    </div>
-
-	    <div class="row">
-	        <div class="col-xs-2">
-	        	航线一车间监管
-	            <div id="air1_dep" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	航线一班组自查
-	            <div id="air1_team" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	航线二车间监管
-	            <div id="air2_dep" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	航线二班组自查
-	            <div id="air2_team" style="width:210px"></div>
-	        </div>
-		</div>
-		<div class="row">
-			<div class="col-xs-2">
-	        	航线三车间监管
-	            <div id="air3_dep" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	航线三班组自查
-	            <div id="air3_team" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	定检车间监管
-	            <div id="certain_dep" style="width:210px"></div>
-	        </div>
-	        <div class="col-xs-2">
-	        	定检班组自查
-	            <div id="certain_team" style="width:210px"></div>
-	        </div>
-	    </div>
-    </div>
-</div>
-
 <div class="container-fluid">
-    
-</div>
-
-<script type="text/javascript" src="/static/daterangepicker/moment.js"></script>
-<script type="text/javascript" src="/static/daterangepicker/daterangepicker-1.3.7.js"></script>
-<link rel="stylesheet" href="/static/daterangepicker/daterangepicker-bs3.css" />
-<link rel="stylesheet" href="/static/daterangepicker/daterangepicker-1.3.7.css" />
-<script type="text/javascript">
-        $(document).ready(function (){
-                    //时间插件
-                $('#reportrange span').html(moment().subtract('hours', 1).format('YYYY-MM-DD HH:mm:ss') + ' - ' + moment().format('YYYY-MM-DD HH:mm:ss'));
-        
-                $('#reportrange').daterangepicker(
-                            {
-                                // startDate: moment().startOf('day'),
-                                //endDate: moment(),
-                                //minDate: '01/01/2012',    //最小时间
-                                maxDate : moment(), //最大时间 
-                                dateLimit : {
-                                    days : 360
-                                }, //起止时间的最大间隔
-                                showDropdowns : true,
-                                showWeekNumbers : false, //是否显示第几周
-                                //timePicker : true, //是否显示小时和分钟
-                                timePickerIncrement : 60, //时间的增量，单位为分钟
-                                timePicker12Hour : false, //是否使用12小时制来显示时间
-                                ranges : {
-                                    //'最近1小时': [moment().subtract('hours',1), moment()],
-                                    '今日': [moment().startOf('day'), moment()],
-                                    '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                                    '最近7日': [moment().subtract('days', 6), moment()],
-                                    '最近30日': [moment().subtract('days', 29), moment()]
-                                },
-                                opens : 'right', //日期选择框的弹出位置
-                                buttonClasses : [ 'btn btn-default' ],
-                                applyClass : 'btn-small btn-primary blue',
-                                cancelClass : 'btn-small',
-                                format : 'YYYY-MM-DD', //控件中from和to 显示的日期格式
-                                separator : ' to ',
-                                locale : {
-                                    applyLabel : '确定',
-                                    cancelLabel : '取消',
-                                    fromLabel : '起始时间',
-                                    toLabel : '结束时间',
-                                    customRangeLabel : '自定义',
-                                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                                            '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                                    firstDay : 1
-                                }
-                            }, function(start, end, label) {//格式化日期显示框
-                                
-                                $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-
-                           });
-
-                //设置日期菜单被选项  --开始--
-                  var dateOption ;
-                  if("${riqi}"=='day') {
-                        dateOption = "今日";
-                  }else if("${riqi}"=='yday') {
-                        dateOption = "昨日";
-                  }else if("${riqi}"=='week'){
-                        dateOption ="最近7日";
-                  }else if("${riqi}"=='month'){
-                        dateOption ="最近30日";
-                  }else if("${riqi}"=='year'){
-                        dateOption ="最近一年";
-                  }else{
-                        dateOption = "自定义";
-                  }
-                   $(".daterangepicker").find("li").each(function (){
-                        if($(this).hasClass("active")){
-                            $(this).removeClass("active");
-                        }
-                        if(dateOption==$(this).html()){
-                            $(this).addClass("active");
-                        }
-                  });
-                       //设置日期菜单被选项  --结束--
-                       //选择时间后触发重新加载的方法
-           $("#reportrange").on('apply.daterangepicker',function(){
-               //当选择时间后，出发dt的重新加载数据的方法
-               document.getElementById("daterange_query").submit()
-           });
-        })
-
-var air1_dep_data = new Array();
-air1_dep_data = {{ air1_dep | safe}};
-var container_scrutator = document.getElementById('air1_dep');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air1_dep_data,
+    <div id="button-container" class="container">
+        <button id="today" class="intext-btn">
+            今日
+        </button>
+        <button id="yesterday" class="intext-btn">
+            昨日
+        </button>
+        <button id="last_7_day" class="intext-btn">
+            7日
+        </button>
+        <button id="this_month" class="intext-btn">
+            本月
+        </button>
+        <button id="all" class="intext-btn">
+            所有
+        </button>
+        <button id="reset_filter" class="intext-btn">
+            重置筛选
+        </button>
+        <button id="export-file" class="intext-btn pull-right">
+            导出为csv文件
+        </button>
+        <br>
+        <br>
+    </div>
+    <div id="example"></div>
+</div><!-- /.container -->
+<script>
+var data = new Array();
+data = {{ json_data | safe}};
+for (var i = 0; i < data.length; i++) {
+        data[i]["相关附件"] = attachment(data[i]["相关附件"])
+        data[i]["ID"] = edit_id(data[i]["ID"])
+};
+var container = document.getElementById('example');
+var hot = new Handsontable(container, {
+  data: data,
   rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
+  colHeaders: ['日期', '地点', '时间', '受检部门/大队', '受检分部/中队', '责任班组', '责任人', '检查者', '信息来源',
+   '问题分类', '问题二级分类', '发生阶段', '问题描述', '整改措施', '处理意见', '关闭情况' , '相关附件', '评分',
+    '操作'],
   columns: [
-      {data: '检查者'},
-      {data: '次数'},
+        {data: '日期',
+        type: 'date',
+        dateFormat: 'YYYY-MM-DD'},
+        {data: '地点'},
+        {data: '时间'},
+        {data: '受检部门/大队'},
+        {data: '受检分部/中队'},
+        {data: '责任班组'},
+        {data: '责任人'},
+        {data: '检查者'},
+        {data: '信息来源'},
+        {data: '问题分类'},
+        {data: '问题二级分类'},
+        {data: '发生阶段'},
+        {data: '问题描述'},
+        {data: '整改措施'},
+        {data: '处理意见'},
+        {data: '关闭情况'},
+        {data: '相关附件',
+        renderer: 'html',},
+        {data: '评分'},
+        {data: 'ID',
+        renderer: 'html',},
     ],
   dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
   readOnly: true,
-  colWidths: [65, 65],
+  colWidths: [65, 65, 65, 115, 115, 88, 88, 88, 88, 88, 120, 88, 220, 202, 88, 88, 65, 88, 88,88],
   filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-var air1_team_data = new Array();
-air1_team_data = {{ air1_team | safe}};
-var container_scrutator = document.getElementById('air1_team');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air1_team_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-
-var air2_dep_data = new Array();
-air2_dep_data = {{ air2_dep | safe}};
-var container_scrutator = document.getElementById('air2_dep');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air2_dep_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-
-var air2_team_data = new Array();
-air2_team_data = {{ air2_team | safe}};
-var container_scrutator = document.getElementById('air2_team');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air2_team_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-var air3_dep_data = new Array();
-air3_dep_data = {{ air3_dep | safe}};
-var container_scrutator = document.getElementById('air3_dep');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air3_dep_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-
-var air3_team_data = new Array();
-air3_team_data = {{ air3_team | safe}};
-var container_scrutator = document.getElementById('air3_team');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: air3_team_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-var certain_dep_data = new Array();
-certain_dep_data = {{ certain_dep | safe}};
-var container_scrutator = document.getElementById('certain_dep');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: certain_dep_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
-});
-
-
-var certain_team_data = new Array();
-certain_team_data = {{ certain_team | safe}};
-var container_scrutator = document.getElementById('certain_team');
-var hot_scrutator = new Handsontable(container_scrutator,{
-    data: certain_team_data,
-  rowHeaders: true,
-  colHeaders: ['检查者', '次数'],
-  columns: [
-      {data: '检查者'},
-      {data: '次数'},
-    ],
-  dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'],
-  readOnly: true,
-  colWidths: [65, 65],
-  filters: true,
-  height: getHeight(),
-  columnSorting: {
-    column: 1,
-    sortOrder: false
-  }
+  height: getHeight()
 });
 
 function getHeight() {
-        return 257;
+        var box = document.getElementById("top-nav");
+        var contentHeight = window.getComputedStyle(box).height;
+        var button = document.getElementById("button-container");
+        var buttonHeight = window.getComputedStyle(button).height;
+        contentHeight =  parseInt(contentHeight);
+        buttonHeight = parseInt(buttonHeight);
+        console.log($(window).height());
+        console.log(contentHeight);
+        console.log(buttonHeight);
+        return $(window).height() - contentHeight - buttonHeight * 2;
     }
+
+function attachment(value) {
+        var the_url;
+        if (value == ""){
+            return "无";
+        }
+        else{
+            the_url = "/media/112233".replace("112233", value);
+            return [
+                '<a href="' + the_url + '" target="_blank">' + "查看" + '</a>'
+            ].join('');
+        }
+    }
+
+function edit_id(value) {
+        var the_url;
+        if (value == ""){
+            return "无";
+        }
+        else{
+            the_url = "/admin/main_web/qa_info/112233/change/".replace("112233", value);
+            return [
+                '<a href="' + the_url + '" target="_blank">' + "修改" + '</a>'
+            ].join('');
+        }
+    }
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var some_day = new Date();
+    var str_today = formatDate(some_day);
+    some_day = new Date();
+    some_day.setDate(some_day.getDate()-1);
+    var str_yesterday = formatDate(some_day);
+    some_day = new Date();
+    some_day.setDate(some_day.getDate()-7);
+    var str_last_7_day = formatDate(some_day);
+    some_day = new Date();
+    some_day.setDate(1);
+    var str_this_month_first_day = formatDate(some_day);
+
+    var example1 = document.getElementById('example');
+    var buttons = {
+        today: document.getElementById('today'),
+        yesterday: document.getElementById('yesterday'),
+        last_7_day: document.getElementById('last_7_day'),
+        this_month: document.getElementById('this_month'),
+        file: document.getElementById('export-file'),
+        all: document.getElementById('all'),
+        reset_filter: document.getElementById('reset_filter')
+    };
+
+    var exportPlugin = hot.getPlugin('exportFile');
+    hot.getPlugin('filters').addFormula(0, 'between', [str_last_7_day, str_today]);
+    hot.getPlugin('filters').filter();
+    buttons.file.addEventListener('click', function() {
+        exportPlugin.downloadFile('csv', {
+                filename: '安全信息',
+                columnHeaders: true,
+                range: [0, 0, 65536, 13]
+            }
+        );
+    });
+    buttons.today.addEventListener('click', function() {
+        hot.getPlugin('filters').addFormula(0, 'between', [str_today, str_today]);
+        hot.getPlugin('filters').filter();
+    });
+    buttons.yesterday.addEventListener('click', function() {
+        hot.getPlugin('filters').addFormula(0, 'between', [str_yesterday, str_yesterday]);
+        hot.getPlugin('filters').filter();
+    });
+    buttons.last_7_day.addEventListener('click', function() {
+        hot.getPlugin('filters').addFormula(0, 'between', [str_last_7_day, str_today]);
+        hot.getPlugin('filters').filter();
+    });
+    buttons.this_month.addEventListener('click', function() {
+        hot.getPlugin('filters').addFormula(0, 'between', [str_this_month_first_day, str_today]);
+        hot.getPlugin('filters').filter();
+    });
+    buttons.all.addEventListener('click', function() {
+        hot.getPlugin('filters').removeFormulas(0);
+        hot.getPlugin('filters').filter();
+    });
+    buttons.reset_filter.addEventListener('click', function() {
+        hot.getPlugin('filters').clearFormulas();
+        hot.getPlugin('filters').filter();
+    });
+  
+  
+    function bindDumpButton() {
+        if (typeof Handsontable === "undefined") {
+            return;
+        }
+        Handsontable.Dom.addEvent(document.body, 'click', function (e) {
+            var element = e.target || e.srcElement;
+            if (element.nodeName == "BUTTON" && element.name == 'dump') {
+                var name = element.getAttribute('data-dump');
+                var instance = element.getAttribute('data-instance');
+                var hot = window[instance];
+                console.log('data of ' + name, hot.getData());
+            }
+        });
+    }
+    bindDumpButton();
+    
+    function formatDate(d) {  
+    var D=['00','01','02','03','04','05','06','07','08','09']  
+    with (d || new Date) return [getFullYear(), D[getMonth()+1]||getMonth()+1, D[getDate()]||getDate()].join('-');  
+    }
+});
+
+
 
 </script>
 {% endblock %}
