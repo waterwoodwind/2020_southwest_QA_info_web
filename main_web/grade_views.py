@@ -191,9 +191,10 @@ def grade_scrutator(request):
         df_single_person = df_data[df_data[u"检查者"]==name]
         if not df_single_person.empty:
             #print df_single_person
-        # 对df_single_person合并总分
+        # 对df_single_person合并总分、求绝对值
             sum_single_person = df_single_person[u"评分"].sum()
             sum_single_person = int(sum_single_person)
+            sum_single_person = abs(sum_single_person)
         # 人名、总分、部门压入name_grade_department_list
             single_dict = {}
             single_dict[u"检查者"] = name
