@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  web:
+    image: im_2020_southwest_qa_web:latest  # 指定镜像的名称和标签
+    container_name: 2020_southwest_qa_web  # 指定容器名称
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: never  # 关键配置：不尝试从远程仓库拉取镜像
+    ports:
+      - "8004:8004"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python manage.py runserver 0.0.0.0:8004
+    environment:
+      - DEBUG=1
